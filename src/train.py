@@ -19,14 +19,14 @@ from tqdm import tqdm
 
 
 def run():
-    # Takes a two colummn csv containing a text and some rating, in that order.
+    # Takes a two colummn csv containing a text and some category, in that order.
     df = pd.read_csv(config.TRAINING_FILE)
-    df.columns = ['text', 'rating']
+    df.columns = ['text', 'category']
     # df=df.sample(frac=0.01, replace=True)
     print(df)
-    print(df['rating'].value_counts())
+    print(df['category'].value_counts())
 
-    possible_labels = df.rating.unique()
+    possible_labels = df.category.unique()
     possible_labels = np.sort(possible_labels)
     
     label_dict = {}
@@ -34,7 +34,7 @@ def run():
         label_dict[possible_label] = index
     print(label_dict)
 
-    df['label'] = df.rating.replace(label_dict)
+    df['label'] = df.category.replace(label_dict)
     print(df.head())
 
     X_train, X_val, y, y_val = train_test_split(df.index.values, 
@@ -47,7 +47,7 @@ def run():
     df.loc[X_train, 'data_type'] = 'train'
     df.loc[X_val, 'data_type'] = 'val'
 
-    print(df.groupby(['rating', 'label', 'data_type']).count())
+    print(df.groupby(['category', 'label', 'data_type']).count())
 
     print(df[df.data_type=='val'].text.values)
 
