@@ -97,7 +97,7 @@ def run():
 
         loss_train_total = 0
 
-        progress_bar = tqdm(dataloader_train, desc='Epoch {:1d}'.format(epoch), leave=False, disable=False)
+        progress_bar = tqdm(dataloader_train, desc='Epoch {:1d}'.format(epoch), position=0, leave=True, disable=False)
         for batch in progress_bar:
             
             model.zero_grad()
