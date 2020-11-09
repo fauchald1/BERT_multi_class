@@ -1,0 +1,4 @@
+*.csv
+*.bin
+*.DS_Store
+*.pyc
