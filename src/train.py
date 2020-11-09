@@ -91,7 +91,7 @@ def run():
     print("Device: ", device)
 
     best = 0
-    for epoch in tqdm(range(1, epochs+1)):
+    for epoch in tqdm(range(1, epochs+1), position=0, leave=True):
 
         model.train()
 
