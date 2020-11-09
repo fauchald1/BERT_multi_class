@@ -11,7 +11,6 @@ def make_dataloader(texts, labels, sampler):
     # Remove all quotation marks from text, for consistency.
     texts = [str(text.replace('"', '')) for text in texts]
     
-    print(texts)
     inputs  = tokenizer.batch_encode_plus(
         texts,
         add_special_tokens=True,

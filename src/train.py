@@ -22,6 +22,8 @@ def run():
     # Takes a two colummn csv containing a text and some category, in that order.
     df = pd.read_csv(config.TRAINING_FILE)
     df.columns = ['text', 'category']
+    df["text"] = df["text"].astype(str)
+    df["text"] = [x.replace(':',' ') for x in df["text"]]
     # df=df.sample(frac=0.01, replace=True)
     print(df)
     print(df['category'].value_counts())
