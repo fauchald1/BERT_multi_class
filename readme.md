@@ -1,6 +1,6 @@
 ## BERT_multi_class classifier
 
-BERT_multi_class trains a BertForSequenceClassification model with a pretrained version of BERT with a .csv file containing texts and classes specified in config.py. All interesting hyperparameters can also be tuned in config.py. The models can then be used for predictions, and this is demonstrated in the jupyter notebook 'predict_labels.ipynb'. Two training datasets and their resulting two models are included in this package, for news category prediction and fake news prediction respectively. A CUDA compatible GPU is highly recommended for both training the models and predicting large amounts of data with the models. 
+BERT_multi_class trains a BertForSequenceClassification model from a pretrained version of [BERT](https://arxiv.org/abs/1810.04805) with a .csv file containing texts and classes specified in config.py. All interesting hyperparameters can also be tuned in config.py. The models can then be used for predictions, and this is demonstrated in the jupyter notebook 'predict_labels.ipynb'. Two training datasets and their resulting two models are included in this package, for news category prediction and fake news prediction respectively. A CUDA compatible GPU is highly recommended for both training the models and predicting large amounts of data with the models. 
 
 ### Installation 
 Make sure you have python installed in your environment (preferably a python version preceding 3.9), then run
