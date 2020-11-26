@@ -4,8 +4,10 @@ BERT_multi_class trains a BertForSequenceClassification model from a pretrained 
 
 ### Installation 
 Make sure you have python installed in your environment (preferably a python version preceding 3.9), then run
+
 `pip install  -r requirements.txt`
-to install the needed packages. Sometimes torch doesnt install properly. In this case go to [pytorch](https://pytorch.org/) and follow recommended installation instructions for your environment. `Python3.9` seems to not work correctly for these installations.
+
+to install the needed packages. Sometimes torch doesnt install properly. In this case go to [pytorch](https://pytorch.org/) and follow recommended installation instructions for your environment. Python 3.9 seems to currently not work correctly for these installations.
 
 ### Data
 Four data-sets are included in this package. 
@@ -15,6 +17,6 @@ Four data-sets are included in this package.
 * all_the_news_pred.csv in output/ is the outcome of running through the predict_labels notebook.
 
 ### Usage
-To train a model on a given dataset, cd into src/ then run `python train.py` with your training data and hyperparameters of choice. This can take some extra time to run for the first time, as the BERT models need to be downloaded from the internet. The best model will be saved (according to f1 score) at config.MODEL_PATH. By default, `config.py` is set to the exact hyperparameters to reproduce the `category3000-len64_batch16.bin` model for news category prediction. Changing the input file, batch and max_length to the corresponding parameters (see report) will produce the `iee_clipped-len512-batch2.bin` for fake/real news prediction.
+To train a model on a given dataset, cd into src/ then run `python train.py` with your training data and hyperparameters of choice, all set in `config,py`. This can take some extra time to run for the first time, as the BERT models need to be downloaded from the internet. The best model will be saved (according to f1 score) at config.MODEL_PATH. By default, `config.py` is set to the exact hyperparameters to reproduce the `category3000-len64_batch16.bin` model for news category prediction. Changing the input file, batch and max_length to the corresponding parameters (see report) will produce the `iee_clipped-len512-batch2.bin` for fake/real news prediction.
 
 To do predictions, open the predict_labels notebook and follow along, this notebook makes use of many of our defined functions and parameters in dataset.py, engine.py and config.py, so don't change its location unless you want to link them up again yourself. Pickled label dicts instantiated during training are also included in input/ for the two training datasets, so that we can produce readable labels in our output. This is not automated if you introduce a new dataset, so beware.

@@ -24,7 +24,7 @@ def run():
     df.columns = ['text', 'category']
     df["text"] = df["text"].astype(str)
     df["text"] = [x.replace(':',' ') for x in df["text"]]
-    # df=df.sample(frac=0.01, replace=True)
+
     print(df)
     print(df['category'].value_counts())
 
