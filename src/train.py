@@ -31,6 +31,7 @@ def run():
     possible_labels = df.category.unique()
     possible_labels = np.sort(possible_labels)
     
+    # Create machine readable labels, also used later in prediction
     label_dict = {}
     for index, possible_label in enumerate(possible_labels):
         label_dict[possible_label] = index
@@ -39,6 +40,7 @@ def run():
     df['label'] = df.category.replace(label_dict)
     print(df.head())
 
+    # Split the dataset according to config.TEST_SIZE
     X_train, X_val, y, y_val = train_test_split(df.index.values, 
                                                       df.label.values, 
                                                       test_size=config.TEST_SIZE, 
@@ -53,39 +55,46 @@ def run():
 
     print(df[df.data_type=='val'].text.values)
 
+    # Make dataloader for train
     print("Making train..")
     dataloader_train = dataset.make_dataloader(df[df.data_type=='train'].text.values, 
                                                df[df.data_type=='train'].label.values,
                                                'Random')
 
+    # Make dataloader for validation
     print("Making val..")
     dataloader_validation = dataset.make_dataloader(df[df.data_type=='val'].text.values, 
                                                     df[df.data_type=='val'].label.values,
                                                     'Sequential')
 
+    # Load BertForSequenceClassification with pretrained BERT specified in config.BERT_PATH
     model = BertForSequenceClassification.from_pretrained(config.BERT_PATH, 
                                                           num_labels=len(label_dict),
                                                           output_attentions=False,
                                                           output_hidden_states=False)
 
-
+    # Init optimizer
     optimizer = AdamW(model.parameters(),
                       lr=1e-5,
                       eps=1e-8)
     
 
+    # Get num. epochs from config.EPOCHS
     epochs = config.EPOCHS
 
+    # Create a scheduler given the optimizer, we do not use warmup
     scheduler = get_linear_schedule_with_warmup(optimizer,
                                                 num_warmup_steps=0,
                                                 num_training_steps=len(dataloader_train)*epochs)
 
+    # Set torch seed so models are recreatable
     seed_val = 17
     random.seed(seed_val)
     np.random.seed(seed_val)
     torch.manual_seed(seed_val)
     torch.cuda.manual_seed_all(seed_val)
 
+    # Mount the model created onto the device specified in config.DEVICE
     device = config.DEVICE
     model.to(device)
     print("Device: ", device)
@@ -97,6 +106,7 @@ def run():
 
         loss_train_total = 0
 
+        # Main training loop
         progress_bar = tqdm(dataloader_train, desc='Epoch {:1d}'.format(epoch), position=0, leave=True, disable=False)
         for batch in progress_bar:
             
@@ -123,6 +133,7 @@ def run():
 
             progress_bar.set_postfix({'training_loss': '{:.3f}'.format(loss.item()/len(batch))})
 
+        # Write results of this epoch
         tqdm.write(f'\nEpoch {epoch}')
 
         loss_train_avg = loss_train_total/len(dataloader_train)            
@@ -135,6 +146,7 @@ def run():
         tqdm.write(f'Accuracy Score (Normalized): {val_acc}')
         tqdm.write(f'F1 Score (Weighted): {val_f1}')
 
+        # Keep track of best results so far, and save the model when we exceed this.
         if val_f1 > best:
             torch.save(model.state_dict(), config.MODEL_PATH)
             best = val_f1

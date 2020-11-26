@@ -1,0 +1,9 @@
+pandas
+numpy
+jupyter
+matplotlib
+sklearn
+torch
+torchvision
+transformers
+tqdm
